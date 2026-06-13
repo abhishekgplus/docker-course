@@ -1,0 +1,122 @@
+# GIT COMMANDS CHEAT SHEET
+
+```bash
+# Check Git version
+git --version
+
+# Configure Git
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --list
+
+# Clone repository
+git clone <repo-url>
+
+# Change directory
+cd <repo-folder>
+
+# Open VS Code
+code .
+
+# Check status
+git status
+
+# View branches
+git branch
+git branch -a
+
+# Create and switch branch
+git checkout -b <branch-name>
+
+# Switch branch
+git checkout <branch-name>
+
+# Add files
+git add .
+git add <filename>
+
+# Commit changes
+git commit -m "commit message"
+
+# Push changes
+git push
+
+# First push for new branch
+git push -u origin <branch-name>
+
+# Pull latest changes
+git pull
+
+# Fetch updates
+git fetch
+git fetch upstream
+
+# Merge branch
+git merge <branch-name>
+git merge upstream/main
+
+# View logs
+git log
+git log --oneline
+git log --oneline --graph --all --decorate
+
+# Compare branches
+git log main..<branch-name> --oneline
+
+# View remotes
+git remote -v
+
+# Add upstream remote
+git remote add upstream <repo-url>
+
+# Delete local branch
+git branch -d <branch-name>
+
+# Delete remote branch
+git push origin --delete <branch-name>
+
+# Show file differences
+git diff
+
+# Show commit details
+git show <commit-id>
+
+# Exit git log
+q
+
+# Cancel current command
+Ctrl + C
+
+# List files
+ls
+dir
+
+# Show current directory
+pwd
+```
+
+# DAILY WORKFLOW
+
+```bash
+git pull
+git status
+git add .
+git commit -m "message"
+git push
+```
+
+# FEATURE BRANCH WORKFLOW
+
+```bash
+git checkout main
+git pull
+git checkout -b feature-branch
+
+git add .
+git commit -m "message"
+git push -u origin feature-branch
+
+git checkout main
+git merge feature-branch
+git push origin main
+```
