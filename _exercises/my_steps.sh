@@ -551,3 +551,454 @@ GitHub Repository
 =========================================================
 END OF DOCUMENT
 =========================================================
+
+8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+# GIT TROUBLESHOOTING AND BRANCHING NOTES
+
+## SCENARIO
+
+Repository:
+docker-course
+
+Original Repository:
+lm-academy/docker-course
+
+Fork:
+abhishek/docker-course
+
+Local Clone:
+C:\Users\abhis\Desktop\k8s\docker-course
+
+---
+
+## UNDERSTANDING THE 3 COPIES
+
+1. Original Repository (Teacher's Copy)
+
+lm-academy/docker-course
+
+2. Fork Repository (My GitHub Copy)
+
+abhishek/docker-course
+
+3. Local Repository (My Laptop)
+
+C:\Users\abhis\Desktop\k8s\docker-course
+
+Diagram:
+
+Original Repo
+|
+v
+My Fork
+|
+v
+My Laptop
+
+---
+
+## WHAT IS ORIGIN?
+
+Command:
+
+git remote -v
+
+Output:
+
+origin https://github.com/abhishek/docker-course.git
+
+Meaning:
+
+origin = My GitHub Fork
+
+Whenever I run:
+
+git push
+
+Git pushes changes to:
+
+origin
+
+which means:
+
+abhishek/docker-course
+
+---
+
+## WHAT IS UPSTREAM?
+
+Command:
+
+git remote add upstream https://github.com/lm-academy/docker-course.git
+
+Meaning:
+
+Add connection to original repository.
+
+Now Git knows:
+
+origin   -> My Fork
+upstream -> Original Repository
+
+Diagram:
+
+Laptop
+|
++---- origin
+|       |
+|       v
+|   abhishek/docker-course
+|
++---- upstream
+|
+v
+lm-academy/docker-course
+
+---
+
+## VERIFY REMOTES
+
+Command:
+
+git remote -v
+
+Expected Output:
+
+origin
+upstream
+
+Meaning:
+
+Git knows both repositories.
+
+---
+
+## FETCH VS PULL
+
+FETCH
+
+Command:
+
+git fetch upstream
+
+Meaning:
+
+Download updates from original repository.
+
+Does NOT modify files.
+
+Safe operation.
+
+Think:
+
+Download only.
+
+---
+
+PULL
+
+Command:
+
+git pull
+
+Meaning:
+
+git fetch
++
+git merge
+
+Downloads and applies changes immediately.
+
+---
+
+## MY BRANCH STRUCTURE
+
+Command:
+
+git branch -a
+
+Output:
+
+* main
+  my-learning-notes
+  remotes/origin/main
+  remotes/origin/my-learning-notes
+  remotes/upstream/main
+
+Meaning:
+
+main                = Main branch
+my-learning-notes   = My feature branch
+
+---
+
+## WHY MY CHANGES WERE NOT VISIBLE IN MAIN
+
+I created a branch:
+
+git checkout -b my-learning-notes
+
+Then I edited files and committed:
+
+git add .
+git commit -m "Added git steps"
+
+Git created commit:
+
+9c1d78c Added git steps
+
+This commit exists only in:
+
+my-learning-notes
+
+It does NOT automatically appear in:
+
+main
+
+Diagram:
+
+Before Merge
+
+main
+|
+b35a5d9
+
+my-learning-notes
+|
+b35a5d9
+|
+9c1d78c Added git steps
+
+This is normal Git behavior.
+
+---
+
+## HOW TO CHECK WHAT IS DIFFERENT
+
+Command:
+
+git log main..my-learning-notes --oneline
+
+Output:
+
+9c1d78c Added git steps
+
+Meaning:
+
+Show commits present in:
+
+my-learning-notes
+
+but missing from:
+
+main
+
+---
+
+## HOW TO MERGE BRANCH INTO MAIN
+
+Step 1
+
+Switch to main:
+
+git checkout main
+
+Step 2
+
+Merge branch:
+
+git merge my-learning-notes
+
+Expected Output:
+
+Updating b35a5d9..9c1d78c
+Fast-forward
+
+Meaning:
+
+Move main forward to latest commit.
+
+---
+
+## VERIFY MERGE
+
+Command:
+
+git log --oneline -5
+
+Expected Output:
+
+9c1d78c Added git steps
+b35a5d9 chore: add slides
+
+Meaning:
+
+Main now contains my changes.
+
+---
+
+## PUSH MAIN TO GITHUB
+
+Command:
+
+git push origin main
+
+Meaning:
+
+Upload updated main branch to GitHub.
+
+After Push:
+
+Local Main        ✓
+GitHub Main       ✓
+Feature Branch    ✓
+
+All synchronized.
+
+---
+
+## DELETE FEATURE BRANCH (OPTIONAL)
+
+Delete Local Branch:
+
+git branch -d my-learning-notes
+
+Delete GitHub Branch:
+
+git push origin --delete my-learning-notes
+
+Only do this after merge.
+
+---
+
+## HOW TO EXIT GIT LOG
+
+Command:
+
+git log
+
+Exit:
+
+q
+
+Meaning:
+
+Quit pager and return to terminal.
+
+---
+
+## USEFUL LOG COMMANDS
+
+Compact Log:
+
+git log --oneline
+
+Graph View:
+
+git log --oneline --graph --all --decorate
+
+Show Branch Difference:
+
+git log main..my-learning-notes --oneline
+
+---
+
+## PROFESSIONAL WORKFLOW
+
+Start New Work:
+
+git checkout main
+
+git pull
+
+git checkout -b docker-notes
+
+Make Changes
+
+git status
+
+git add .
+
+git commit -m "Added Docker notes"
+
+git push -u origin docker-notes
+
+---
+
+Merge Completed Work:
+
+git checkout main
+
+git merge docker-notes
+
+git push origin main
+
+---
+
+## DAILY WORKFLOW
+
+git pull
+
+# Make Changes
+
+git status
+
+git add .
+
+git commit -m "Day 1 Notes"
+
+git push
+
+---
+
+## HOW GIT STORES CHANGES
+
+Edit File
+|
+v
+Working Directory
+|
+v
+git add .
+|
+v
+Staging Area
+|
+v
+git commit
+|
+v
+Local Repository
+|
+v
+git push
+|
+v
+GitHub Repository
+
+---
+
+## KEY LEARNING
+
+1. A commit belongs to the branch where it was created.
+
+2. Commits do NOT automatically appear in other branches.
+
+3. To bring changes into main:
+
+git checkout main
+git merge branch-name
+
+4. origin = My Fork
+
+5. upstream = Original Repository
+
+6. git fetch downloads changes only.
+
+7. git pull downloads and merges.
+
+8. git push uploads local commits.
+
+9. git log opens a pager.
+
+10. Press q to exit git log.
